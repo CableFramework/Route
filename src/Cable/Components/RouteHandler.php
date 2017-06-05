@@ -41,7 +41,7 @@ class RouteHandler implements RouteHandlerInterface
     }
 
     /**
-     *
+     * @return RouteDispatcher
      */
     public function handle()
     {
@@ -51,19 +51,30 @@ class RouteHandler implements RouteHandlerInterface
 
         if (isset($options['subdomain'])) {
             $this->resolveSubdomain($options['subdomain']);
+
+            // we dont need that anymore
+            unset($options['subdomain']);
         }
 
         if (isset($options['scheme'])) {
             $this->resolveSchemes($options['scheme']);
+
+            // we dont need that anymore
+            unset($options['scheme']);
         }
 
         if (isset($options['name'])) {
             $this->dispatcher->setName($options['name']);
+
+            unset($options['name']);
         } else {
             $this->dispatcher->setName(
                 $this->resolveName($this->path, $options)
             );
         }
+
+        // we get what we need here ,we will pass them into defaults
+        $this->dispatcher->addDefaults($options);
 
 
         return $this->dispatcher;

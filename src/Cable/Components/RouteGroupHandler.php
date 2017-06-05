@@ -35,11 +35,22 @@ class RouteGroupHandler implements RouteHandlerInterface
 
         if (isset($options['scheme'])) {
             $this->collection->setSchemes($options['scheme']);
+
+            // we don't need that anymore
+            unset($options['scheme']);
         }
 
         if (isset($options['subdomain'])) {
-            $this->resolveSubdomain($this->collection, $options['subdomain']);
+            $this->resolveSubdomain($options['subdomain']);
+
+            // we don't need that anymore
+            unset($options['subdomain']);
         }
+
+
+        // we got what we needed, we will pass everything else into defaults
+        $this->collection->addDefaults($options);
+
 
         return $this->collection;
     }
@@ -48,16 +59,16 @@ class RouteGroupHandler implements RouteHandlerInterface
      * @param RouteCollection $route
      * @param array $subdomain
      */
-    private function resolveSubdomain(RouteCollection $route, array $subdomain)
+    private function resolveSubdomain( array $subdomain)
     {
         if (isset($subdomain['domain'])) {
-            $route->setHost($subdomain['domain']);
+            $this->collection->setHost($subdomain['domain']);
 
             if (isset($subdomain['catch'])) {
                 $catch = $subdomain['catch'];
 
                 foreach ($catch as $key => $val){
-                    $route->addRequirements(array(
+                    $this->collection->addRequirements(array(
                         $key => $val
                     ));
                 }
