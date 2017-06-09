@@ -229,11 +229,17 @@ class Routing implements RoutingInterface
     private function dispatchOptions(&$options, $uri = '')
     {
         if (is_string($options)) {
-            $options = $this->getControllerAndMethodFromString($options);
+            $controller = $this->getControllerAndMethodFromString($options);
         } elseif (is_array($options)) {
-            $options = $this->parseControllerFromAction($options, $uri);
+            $controller = $this->parseControllerFromAction($options, $uri);
         }
 
+        // save route middleware
+        if (isset($options['middleware'])) {
+            $options['route_middleware'] = $options['middleware'];
+
+            unset($options['middleware']);
+        }
 
         $namespace = isset($this->options['working']) ? $this->options['working'] :
             $this->config->get('http.route.namespace', 'App\Controllers');
@@ -242,7 +248,7 @@ class Routing implements RoutingInterface
             $namespace .= '\\' . $options['namespace'];
         }
 
-        return new DispatcherDataProvider($namespace, $options['controller'], $options['method']);
+        return new DispatcherDataProvider($namespace, $controller['controller'], $controller['method']);
     }
 
     /**
@@ -251,7 +257,7 @@ class Routing implements RoutingInterface
      * @return array
      * @throws NotFoundException
      */
-    private function parseControllerFromAction($options, $route)
+    private function parseControllerFromAction(&$options, $route)
     {
         if (!isset($options['action'])) {
             throw new NotFoundException(sprintf('Your action couldnot find in %s route', $route));
@@ -315,7 +321,7 @@ class Routing implements RoutingInterface
         $collections = $this->collect;
 
 
-        $collection = $this->container->resolve(RouteCollection::class);
+        $collection = $this->container->make(RouteCollection::class);
 
         foreach ($collections as $item) {
             // if item is a group of collections we will resolve it
