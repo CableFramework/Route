@@ -62,7 +62,8 @@ class Routing implements RoutingInterface
         ContainerInterface $container,
         Config $config,
         array $options = []
-    ) {
+    )
+    {
 
         $this->request = $request;
         $this->container = $container;
@@ -82,7 +83,7 @@ class Routing implements RoutingInterface
     {
         $uri = $this->prepareUri($uri);
 
-        if ( ! is_array($methods)) {
+        if (!is_array($methods)) {
             $methods = [$methods];
         }
 
@@ -92,7 +93,7 @@ class Routing implements RoutingInterface
             '', array('options' => $dispatchedData)
         );
 
-        $uri = isset($this->options['prefix']) ? $this->options['prefix'].$uri : $uri;
+        $uri = isset($this->options['prefix']) ? $this->options['prefix'] . $uri : $uri;
 
         $options['methods'] = $methods;
         $route = (new RouteHandler($route, $options, $this->appname, $uri))
@@ -111,10 +112,10 @@ class Routing implements RoutingInterface
      */
     private function prepareUri($uri)
     {
-       $firstLetter = $uri[0];
+        $firstLetter = $uri[0];
 
         if ($firstLetter !== '/') {
-            $uri = '/'. $uri;
+            $uri = '/' . $uri;
         }
 
         return $uri;
@@ -219,7 +220,6 @@ class Routing implements RoutingInterface
     }
 
 
-
     /**
      * @param array|string $options
      * @param string $uri
@@ -236,10 +236,10 @@ class Routing implements RoutingInterface
 
 
         $namespace = isset($this->options['working']) ? $this->options['working'] :
-            $this->config->get('http.route.namespace');
+            $this->config->get('http.route.namespace', 'App\Controllers');
 
         if (isset($options['namespace'])) {
-            $namespace .= '\\'.$options['namespace'];
+            $namespace .= '\\' . $options['namespace'];
         }
 
         return new DispatcherDataProvider($namespace, $options['controller'], $options['method']);
@@ -253,7 +253,7 @@ class Routing implements RoutingInterface
      */
     private function parseControllerFromAction($options, $route)
     {
-        if ( ! isset($options['action'])) {
+        if (!isset($options['action'])) {
             throw new NotFoundException(sprintf('Your action couldnot find in %s route', $route));
         }
 
@@ -274,7 +274,7 @@ class Routing implements RoutingInterface
     private function getControllerAndMethodFromString($options)
     {
         if (false === strpos($options, '::')) {
-            $options = $options.'::'.$this->config->get('http.route.method');
+            $options = $options . '::' . $this->config->get('http.route.method');
         }
 
         list($controller, $method) = explode('::', $options);
@@ -321,7 +321,7 @@ class Routing implements RoutingInterface
             // if item is a group of collections we will resolve it
             if ($item instanceof Routing) {
                 $collection->addCollection(
-                   $group =  $this->handleGroupCollection($item->handle(), $item->getOptions())
+                    $group = $this->handleGroupCollection($item->handle(), $item->getOptions())
                 );
 
                 continue;
