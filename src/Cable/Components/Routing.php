@@ -117,6 +117,12 @@ class Routing implements RoutingInterface
     {
         if (isset($options['middleware'])) {
             $middleware = $options['middleware'];
+
+
+            if (!is_array($middleware)) {
+                $middleware = [$middleware];
+            }
+
             $middleware = array_merge($this->middleware, $middleware);
         } else {
             $middleware = $this->middleware;
