@@ -73,9 +73,11 @@ class RouteHandler implements RouteHandlerInterface
             );
         }
 
+        unset($options['methods']);
+
+
         // we get what we need here ,we will pass them into defaults
         $this->dispatcher->addDefaults($options);
-
 
         return $this->dispatcher;
     }

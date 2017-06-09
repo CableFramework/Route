@@ -1,4 +1,5 @@
 <?php
+
 namespace Cable\Routing;
 
 use Symfony\Component\Routing\RouteCollection;
@@ -20,10 +21,14 @@ class RouteGroupHandler implements RouteHandlerInterface
      */
     private $options;
 
-    public function __construct(RouteCollection $collection,array $options)
+
+    public function __construct(
+        RouteCollection $collection,
+        array $options
+    )
     {
         $this->collection = $collection;
-        $this->options= $options;
+        $this->options = $options;
     }
 
     /**
@@ -52,16 +57,16 @@ class RouteGroupHandler implements RouteHandlerInterface
         $this->collection->addDefaults($options);
 
 
+
         return $this->collection;
     }
-
 
 
     /**
      * @param RouteCollection $route
      * @param array $subdomain
      */
-    private function resolveSubdomain( array $subdomain)
+    private function resolveSubdomain(array $subdomain)
     {
         if (isset($subdomain['domain'])) {
             $this->collection->setHost($subdomain['domain']);
@@ -69,7 +74,7 @@ class RouteGroupHandler implements RouteHandlerInterface
             if (isset($subdomain['catch'])) {
                 $catch = $subdomain['catch'];
 
-                foreach ($catch as $key => $val){
+                foreach ($catch as $key => $val) {
                     $this->collection->addRequirements(array(
                         $key => $val
                     ));

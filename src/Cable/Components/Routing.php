@@ -12,12 +12,6 @@ class Routing implements RoutingInterface
 {
 
     /**
-     * @var Request
-     */
-    private $request;
-
-
-    /**
      * @var Config
      */
     private $config;
@@ -37,7 +31,7 @@ class Routing implements RoutingInterface
     /**
      * @var array
      */
-    private $options;
+    private $options = [];
 
     /**
      * @var name
@@ -51,33 +45,40 @@ class Routing implements RoutingInterface
     private $handled;
 
     /**
+     * @var array
+     */
+    private $middleware = [];
+
+    /**
      * Route constructor.
-     * @param Request $request
      * @param ContainerInterface $container
      * @param Config $config
      * @param array $options
+     * @param array $topMiddleware
      */
     public function __construct(
-        Request $request,
         ContainerInterface $container,
         Config $config,
-        array $options = []
+        array $options = [],
+        array $topMiddleware = []
     )
     {
 
-        $this->request = $request;
         $this->container = $container;
         $this->config = $config;
         $this->options = $options;
         $this->appname = $config->get('app.name');
+        $this->middleware = array_merge($this->middleware, $topMiddleware);
+
     }
 
 
     /**
      * @param array $methods
      * @param string $uri
-     * @param arrray $options
-     * @return $this
+     * @param array $options
+     * @throws NotFoundException
+     * @return RouteDispatcher
      */
     public function match($methods, $uri, $options)
     {
@@ -96,6 +97,11 @@ class Routing implements RoutingInterface
         $uri = isset($this->options['prefix']) ? $this->options['prefix'] . $uri : $uri;
 
         $options['methods'] = $methods;
+
+        // prepare middleware
+        $this->dispatchMiddleware($options);
+
+
         $route = (new RouteHandler($route, $options, $this->appname, $uri))
             ->handle()
             ->setMethods($methods);
@@ -105,6 +111,24 @@ class Routing implements RoutingInterface
 
     }
 
+    /**
+     * @param array $options
+     */
+    private function dispatchMiddleware(&$options)
+    {
+        if (isset($options['middleware'])) {
+            $middleware = $options['middleware'];
+            if (!is_array($middleware)) {
+                $middleware = [$middleware];
+            }
+
+            $middleware = array_merge($this->middleware, $middleware);
+        } else {
+            $middleware = $this->middleware;
+        }
+
+        $options['middleware'] = $middleware;
+    }
 
     /**
      * @param string $uri
@@ -128,12 +152,14 @@ class Routing implements RoutingInterface
      */
     public function group($group, \Closure $callback)
     {
+
+        $middleware = $this->resolveMiddleware($group);
+
         $routing = new static(
-            $this->request,
             $this->container,
             $this->config,
             $group,
-            $this->appname
+            $middleware
         );
 
         $this->container->add(Routing::class, $routing);
@@ -145,6 +171,27 @@ class Routing implements RoutingInterface
         $this->container->add(Routing::class, $this);
 
         return $this->collect[] = $routing;
+    }
+
+    /**
+     * @param array $group
+     * @return array
+     */
+    private function resolveMiddleware(&$group)
+    {
+        $middleware = [];
+
+        if (isset($group['middleware'])) {
+            $middleware = $group['middleware'];
+
+            if (is_string($middleware)) {
+                $middleware = [$middleware];
+            }
+
+            unset($group['middleware']);
+        }
+
+        return array_merge($this->middleware, $middleware);
     }
 
     /**
@@ -235,13 +282,6 @@ class Routing implements RoutingInterface
         }
 
 
-        // save route middleware
-        if (isset($options['middleware'])) {
-            $options['route_middleware'] = $options['middleware'];
-
-            unset($options['middleware']);
-        }
-
         $namespace = isset($this->options['working']) ? $this->options['working'] :
             $this->config->get('http.route.namespace', 'App\Controllers');
 
@@ -269,7 +309,7 @@ class Routing implements RoutingInterface
         // we dont need that action any more
         unset($options['action']);
 
-       return $this->getControllerAndMethodFromString($action);
+        return $this->getControllerAndMethodFromString($action);
 
     }
 
@@ -286,25 +326,6 @@ class Routing implements RoutingInterface
         list($controller, $method) = explode('::', $options);
 
         return array('controller' => $controller, 'method' => $method);
-    }
-
-    /**
-     * @return Request
-     */
-    public function getRequest()
-    {
-        return $this->request;
-    }
-
-    /**
-     * @param Request $request
-     * @return Routing
-     */
-    public function setRequest($request)
-    {
-        $this->request = $request;
-
-        return $this;
     }
 
 
@@ -326,8 +347,12 @@ class Routing implements RoutingInterface
         foreach ($collections as $item) {
             // if item is a group of collections we will resolve it
             if ($item instanceof Routing) {
+
                 $collection->addCollection(
-                    $group = $this->handleGroupCollection($item->handle(), $item->getOptions())
+                    $group = $this->handleGroupCollection(
+                        $item->handle(),
+                        $item->getOptions()
+                    )
                 );
 
                 continue;
@@ -344,6 +369,7 @@ class Routing implements RoutingInterface
 
         return $this->handled = $collection;
     }
+
 
     /**
      * @param RouteCollection $collection
@@ -373,4 +399,24 @@ class Routing implements RoutingInterface
 
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getMiddleware()
+    {
+        return $this->middleware;
+    }
+
+    /**
+     * @param array $middleware
+     * @return Routing
+     */
+    public function setMiddleware($middleware)
+    {
+        $this->middleware = $middleware;
+        return $this;
+    }
+
+
 }

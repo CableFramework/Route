@@ -22,12 +22,13 @@ class Matcher implements MatcherInterface
 
     /**
      * Matcher constructor.
+     * @param Request $request
      * @param Routing $routing
      * @param RequestContext $context
      */
-    public function __construct(Routing $routing, RequestContext $context)
+    public function __construct(Request $request,Routing $routing, RequestContext $context)
     {
-        $this->request = $routing->getRequest();
+        $this->request = $request;
 
         $this->matcher = new UrlMatcher(
             $routing->handle(),
