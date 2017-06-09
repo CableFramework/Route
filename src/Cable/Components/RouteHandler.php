@@ -174,7 +174,7 @@ class RouteHandler implements RouteHandlerInterface
             return $options['name'];
         }
 
-        $resolved = $this->resolveNameByPath($path, $options['methods']);
+        $resolved = $this->resolveNameByPath($path);
 
         return $resolved === '' ? $this->appName.mt_rand(1, 9999) : $resolved;
     }
@@ -186,13 +186,13 @@ class RouteHandler implements RouteHandlerInterface
      * @param array $methods
      * @return mixed
      */
-    private function resolveNameByPath($path, array $methods)
+    private function resolveNameByPath($path)
     {
         $replaced = str_replace('/', ' ', $path);
 
         $cleaned = trim($replaced);
 
-        return str_replace(' ', '-', $cleaned).'-'.strtolower(implode('-', $methods));
+        return str_replace(' ', '-', $cleaned);
     }
 
     /**

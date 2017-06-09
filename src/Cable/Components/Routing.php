@@ -96,7 +96,6 @@ class Routing implements RoutingInterface
 
         $uri = isset($this->options['prefix']) ? $this->options['prefix'] . $uri : $uri;
 
-        $options['methods'] = $methods;
 
         // prepare middleware
         $this->dispatchMiddleware($options);
@@ -118,14 +117,17 @@ class Routing implements RoutingInterface
     {
         if (isset($options['middleware'])) {
             $middleware = $options['middleware'];
-            if (!is_array($middleware)) {
-                $middleware = [$middleware];
-            }
-
             $middleware = array_merge($this->middleware, $middleware);
         } else {
             $middleware = $this->middleware;
         }
+
+
+        if (!is_array($middleware)) {
+            $middleware = [$middleware];
+        }
+
+
 
         $options['middleware'] = $middleware;
     }
@@ -276,10 +278,12 @@ class Routing implements RoutingInterface
     private function dispatchOptions(&$options, $uri = '')
     {
         if (is_string($options)) {
-            $controller = $this->getControllerAndMethodFromString($options);
-        } elseif (is_array($options)) {
-            $controller = $this->parseControllerFromAction($options, $uri);
+            $options = ['action' => $options];
         }
+
+
+        $controller = $this->parseControllerFromAction($options, $uri);
+
 
 
         $namespace = isset($this->options['working']) ? $this->options['working'] :
@@ -417,6 +421,4 @@ class Routing implements RoutingInterface
         $this->middleware = $middleware;
         return $this;
     }
-
-
 }
