@@ -234,6 +234,7 @@ class Routing implements RoutingInterface
             $controller = $this->parseControllerFromAction($options, $uri);
         }
 
+
         // save route middleware
         if (isset($options['middleware'])) {
             $options['route_middleware'] = $options['middleware'];
