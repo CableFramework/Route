@@ -266,12 +266,11 @@ class Routing implements RoutingInterface
 
         $action = $options['action'];
 
-        $options = array_merge($options, $this->getControllerAndMethodFromString($action));
-
-        // we dont need that action any more, we will delete it.
+        // we dont need that action any more
         unset($options['action']);
 
-        return $options;
+       return $this->getControllerAndMethodFromString($action);
+
     }
 
     /**
