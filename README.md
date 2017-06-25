@@ -77,7 +77,7 @@ $handled = (new \Cable\Routing\Routing($request, $collection, $matcher))->handle
 You can use multiple matchers in one matcher
 
 
-````php
+```php
 use Cable\Routing\Matcher\StaticMatcher;
 use Cable\Routing\Matcher\RegexMatcher;
 use Cable\Routing\Matcher\NestedMatcher;
@@ -89,4 +89,4 @@ $matcher =  new NestedMatcher(
 
 $handled = (new \Cable\Routing\Routing($request, $collection, $matcher))->handle();
 
-````
+```

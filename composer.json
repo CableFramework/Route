@@ -19,6 +19,7 @@
     "require": {
         "cable/cable-config": "^1.0",
         "symfony/http-foundation": "^3.3",
-        "cable/cable-facades": "^1.0"
+        "cable/cable-facades": "^1.0",
+        "cable/cable-annotations": "^1.0"
     }
 }

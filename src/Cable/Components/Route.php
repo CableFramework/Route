@@ -133,7 +133,7 @@ class Route
      */
     public function setMethods($methods)
     {
-        $this->methods = (array) $methods;
+        $this->methods = array_map('strtoupper', (array) $methods);
 
         return $this;
     }
