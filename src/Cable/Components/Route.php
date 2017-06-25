@@ -49,7 +49,7 @@ class Route
      */
     public function __construct($uri, array $requirements = [])
     {
-        $this->uri = $uri;
+        $this->setUri($uri);
         $this->requirements = $requirements;
     }
 
