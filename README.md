@@ -5,6 +5,12 @@ Route library for cable framework
 
  Cable Route uses symfony Request class for handle uri and pathinfo
  
+ 
+```php
+
+$request = \Symfony\Component\HttpFoundation\Request::create('/post/5', 'GET');
+
+```
 
 ## Simple Usage
 
@@ -28,12 +34,7 @@ $handled = (new \Cable\Routing\Routing($request, $collection, $matcher))->handle
 ```
 
 
- 
-```php
 
-$request = \Symfony\Component\HttpFoundation\Request::create('/post/5', 'GET');
-
-```
 
 ## Static Matcher
 
