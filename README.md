@@ -1,5 +1,26 @@
-# Route
+## Route
 Route library for cable framework
+
+```php
+
+use Cable\Routing\Route;
+
+
+$route = new Route('/post/:id', array('id' => "\d+"));
+
+// same as $route->setUri('/post/:id')
+                  ->setRequirements(array('id' => "\d+"));
+   
+// set scheme, by default supports both http and https
+$route->setScheme(array('http', 'https'));
+
+// set host,  for examle sub.test.com will matched and
+// :sub_domain parameter will passed into HandledRoute
+$route->setHost(':subdomain_parameter.test.com');
+
+
+// set 
+```
 
 ## Request
 
@@ -38,13 +59,12 @@ $handled = (new \Cable\Routing\Routing($request, $collection, $matcher))->handle
 
 ## Static Matcher
 
+You can't use dynamic host and path info parameters with static matcher
+
+
 Matches only static url's
 
 ```php 
- $route = new \Cable\Routing\Route('/post/5');
- $route->setMethods(array('GET'));
- 
- $collection->addRoute($route);
 
 $matcher = new \Cable\Routing\Matcher\StaticMatcher();
 
