@@ -1,8 +1,14 @@
 <?php
 
-namespace Cable\Routing;
+namespace Cable\Routing\Preparer;
 
+use Cable\Routing\Route;
+use Cable\Routing\Routing;
 
+/**
+ * Class RegexPrepare
+ * @package Cable\Routing\Preparer
+ */
 class RegexPrepare
 {
     /**

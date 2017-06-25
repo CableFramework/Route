@@ -4,6 +4,7 @@ namespace Cable\Routing\Matcher;
 
 use Cable\Routing\HandledRoute;
 use Cable\Routing\MatcherRequestAware;
+use Cable\Routing\Preparer\RegexPrepare;
 use Cable\Routing\Route;
 use Cable\Routing\RouteCollection;
 use Cable\Routing\Interfaces\MatcherInterface;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class RegexMatcher implements MatcherInterface
 {
 
-    use MatcherRequestAware;
+    use MatcherRequestAware, RegexAwareTrait;
 
 
     /**
@@ -41,10 +42,14 @@ class RegexMatcher implements MatcherInterface
         $routes = $collection->getRoutes();
         $method = $this->request->getMethod();
         $requestUri = $this->getRequestUri();
-
+        $scheme = $this->request->getScheme();
 
         foreach ($routes as $route) {
 
+            // if requested methods don't match route's scheme skip this route,
+            if (!in_array($scheme, $route->getScheme(), true)) {
+                continue;
+            }
 
             // if requested methods don't match routes methods skip this route,
             if ( ! in_array($method, $route->getMethods(), true)) {
@@ -54,11 +59,6 @@ class RegexMatcher implements MatcherInterface
             // prepare routes for matching
             // sets host and scheme
             $this->prepareRouteForMatching($route);
-
-            // if we do not need use regex here we return back from here
-            if ( ! $this->neededRegex($route) && $requestUri === $this->prepareStaticUri($route)) {
-                return $route;
-            }
 
             // prepares regex string, might very complicated
             $regex = $this->prepareRegex($route);
@@ -121,16 +121,7 @@ class RegexMatcher implements MatcherInterface
      */
     private function neededRegex(Route $route)
     {
-        if (count($route->getScheme()) > 1) {
-            return true;
-        }
-
-        if (count($route->getRequirements()) > 1) {
-            return true;
-        }
-
-
-        return false;
+        return $this->hasRegexCommand($route->getHost()) ||$this->hasRegexCommand($route->getUri());
     }
 
     /**

@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 class StaticMatcher implements MatcherInterface
 {
 
+    use RegexAwareTrait;
     /**
      * @param Request $request
      * @param RouteCollection $collection
@@ -25,14 +26,24 @@ class StaticMatcher implements MatcherInterface
     {
         $routes = $collection->getRoutes();
 
+
+        $scheme = $request->getScheme();
+        $method = $request->getMethod();
+
         foreach ($routes as $route){
 
-
-
-            if (!in_array($request->getMethod(), $route->getMethods(), true)) {
+            if (!in_array($scheme, $route->getScheme(), true)) {
                 continue;
             }
 
+
+            if (!in_array($method, $route->getMethods(), true)) {
+                continue;
+            }
+
+            if ($this->hasRegexCommand($route->getHost()) ||$this->hasRegexCommand($route->getUri())) {
+                continue;
+            }
 
             if ($request->getPathInfo() === $route->getUri()) {
                 return new HandledRoute($route, $route->getDefaults());
@@ -41,4 +52,5 @@ class StaticMatcher implements MatcherInterface
 
         return false;
     }
+
 }
