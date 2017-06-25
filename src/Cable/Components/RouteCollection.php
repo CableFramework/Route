@@ -1,21 +1,51 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: My
- * Date: 06/25/2017
- * Time: 05:42
- */
-
 namespace Cable\Routing;
 
 
-class RouteCollection
+class RouteCollection extends Route
 {
 
     /**
-     * @var array
+     * @var string
      */
-    private $routes;
+    private $prefix;
+
+
+
+    /**
+     * @var Route[]
+     */
+    private $routes = [];
+
+    /**
+     * RouteCollection constructor.
+     * @param $uri
+     * @param array $requirements
+     */
+    public function __construct($uri= '', array $requirements = [])
+    {
+        parent::__construct('', $requirements);
+        $this->setPrefix($uri);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
+
+    /**
+     * @param string $prefix
+     * @return RouteCollection
+     */
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+
+        return $this;
+    }
 
 
     /**
@@ -23,8 +53,78 @@ class RouteCollection
      * @return Route
      */
     public function addRoute(Route $route){
-       return $this->routes[] = $route;
+        $name = $route->getName();
+
+        if (null !== $name) {
+            return $this->routes[$name] = $route;
+        }
+
+         return $this->routes[] = $route;
     }
+
+
+    /**
+     * get routes from inside a route collection
+     *
+     * @param RouteCollection $collection
+     * @return $this
+     */
+    public function addCollection(RouteCollection $collection){
+        $routes = $collection->getRoutes();
+
+        $prefix = $collection->getPrefix();
+        $host = $collection->getHost();
+        $scheme = $collection->getScheme();
+        $methods = $collection->getMethods();
+
+        foreach ($routes as $route){
+
+            if ($prefix !== '') {
+                $route->setUri(
+                    $prefix.$route->getUri()
+                );
+            }
+
+            if(!empty($methods) && empty($route->getMethods())){
+                $route->setMethods($methods);
+            }
+
+
+            if (!empty($scheme) && empty($route->getScheme())) {
+                $route->setScheme($scheme);
+            }
+
+
+            if (!empty($host) && empty($route->getHost())) {
+                $route->setHost($host);
+            }
+
+            $this->addRoute($route);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return object|bool
+     */
+    public function getRouteByName($name){
+        if (isset($this->routes[$name])) {
+            return $name;
+        }
+
+        foreach ($this->routes as $route){
+            if ($route->getName() === $name) {
+                return $route;
+            }
+        }
+
+        return false;
+    }
+
+
+
 
     /**
      * @return Route[]
@@ -44,4 +144,6 @@ class RouteCollection
 
         return $this;
     }
+
+
 }

@@ -12,6 +12,11 @@ class Route
     /**
      * @var string
      */
+    private $name;
+
+    /**
+     * @var string
+     */
     private $uri;
 
     /**
@@ -23,7 +28,7 @@ class Route
     /**
      * @var array
      */
-    private $methods;
+    private $methods = [];
 
     /**
      * @var string
@@ -56,6 +61,25 @@ class Route
     /**
      * @return string
      */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return Route
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getUri()
     {
         return $this->uri;
@@ -67,6 +91,10 @@ class Route
      */
     public function setUri($uri)
     {
+        if (strlen($uri) > 0 && $uri[0] !== '/') {
+            $uri = '/'. $uri;
+        }
+
         $this->uri = $uri;
 
         return $this;

@@ -1,13 +1,23 @@
 <?php
 
-namespace Cable\Routing;
+namespace Cable\Routing\Matcher;
 
-
+use Cable\Routing\HandledRoute;
+use Cable\Routing\MatcherRequestAware;
+use Cable\Routing\Route;
+use Cable\Routing\RouteCollection;
 use Cable\Routing\Interfaces\MatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class Matcher implements MatcherInterface
+/**
+ * Class RegexMatcher
+ * @package Cable\Routing\Matcher
+ */
+class RegexMatcher implements MatcherInterface
 {
+
+    use MatcherRequestAware;
+
 
     /**
      * @var array
@@ -18,18 +28,23 @@ class Matcher implements MatcherInterface
     ];
 
     /**
+     * @param Request $request an symfony request instance
+     * @param RouteCollection $collection
+     *
      * @return mixed
      */
     public function match(Request $request, RouteCollection $collection)
     {
+        $this->request = $request;
 
         // get method and requested uri,
         $routes = $collection->getRoutes();
-        $method = $request->getMethod();
-        $requestUri = $request->getUri();
+        $method = $this->request->getMethod();
+        $requestUri = $this->getRequestUri();
 
 
         foreach ($routes as $route) {
+
 
             // if requested methods don't match routes methods skip this route,
             if ( ! in_array($method, $route->getMethods(), true)) {
@@ -48,7 +63,6 @@ class Matcher implements MatcherInterface
             // prepares regex string, might very complicated
             $regex = $this->prepareRegex($route);
 
-            var_dump($regex);
             // lets check the regex is matching with called request
             if ( ! preg_match($regex, $requestUri, $matched)) {
                 continue;
