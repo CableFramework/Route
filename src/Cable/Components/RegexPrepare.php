@@ -32,17 +32,19 @@ class RegexPrepare
     {
         $scheme = $this->prepareSchemeRegex();
         $host = $this->prepareHostRegex();
+        $path = $this->preparePathRegex();
+        $port = '.*?';
 
-        $path =  $this->preparePathRegex();
-
-        return sprintf('#%s://%s%s#si', $scheme, $host, $path);
+        return sprintf('#%s://%s%s%s#si', $scheme, $host, $port, $path);
     }
+
 
     /**
      * @return mixed|string
      */
-    public function preparePathRegex(){
-       $path = $this->route->getUri();
+    public function preparePathRegex()
+    {
+        $path = $this->route->getUri();
 
         if (strpos($path, ':') === false) {
             return $path;
@@ -53,13 +55,13 @@ class RegexPrepare
             preg_replace_callback(
                 '#:(?<command>[A-z0-0?]+)#',
                 array($this, 'replaceCommandParameter'),
-                $path))
-        {
+                $path
+            )
+        ) {
             return str_replace('.', '\.', $prepared);
         }
 
     }
-
 
 
     /**
@@ -73,13 +75,15 @@ class RegexPrepare
             return $host;
         }
 
+
         if ($prepared =
             preg_replace_callback(
                 '#:(?<command>[A-z0-0]+)#',
                 array($this, 'replaceCommandParameter'),
-                $host))
-        {
-                return str_replace('.', '\.', $prepared);
+                $host
+            )
+        ) {
+            return str_replace('.', '\.', $prepared);
         }
     }
 
@@ -125,6 +129,7 @@ class RegexPrepare
     public function setParameters(array $parameters)
     {
         $this->parameters = $parameters;
+
         return $this;
     }
 

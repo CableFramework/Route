@@ -42,6 +42,12 @@ class Route
     private $defaults = [];
 
     /**
+     * @var int
+     */
+    private $port = 80;
+
+
+    /**
      * Route constructor.
      * @param $uri
      * @param array $requirements
@@ -51,6 +57,26 @@ class Route
         $this->uri = $uri;
         $this->requirements = $requirements;
     }
+
+    /**
+     * @return int
+     */
+    public function getPort()
+    {
+        return $this->port;
+    }
+
+    /**
+     * @param int $port
+     * @return Route
+     */
+    public function setPort($port)
+    {
+        $this->port = $port;
+
+        return $this;
+    }
+
 
     /**
      * @return string

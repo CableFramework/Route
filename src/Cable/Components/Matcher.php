@@ -8,15 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Matcher implements MatcherInterface
 {
-    /**
-     * @var RouteCollection
-     */
-    private $collection;
-
-    /**
-     * @var Request
-     */
-    private $request;
 
     /**
      * @var array
@@ -27,25 +18,16 @@ class Matcher implements MatcherInterface
     ];
 
     /**
-     * Matcher constructor.
-     * @param Request $request
-     * @param RouteCollection $collection
-     */
-    public function __construct(Request $request, RouteCollection $collection)
-    {
-        $this->collection = $collection;
-        $this->request = $request;
-    }
-
-    /**
      * @return mixed
      */
-    public function match()
+    public function match(Request $request, RouteCollection $collection)
     {
+
         // get method and requested uri,
-        $routes = $this->collection->getRoutes();
-        $method = $this->request->getMethod();
-        $requestUri = $this->request->getUri();
+        $routes = $collection->getRoutes();
+        $method = $request->getMethod();
+        $requestUri = $request->getUri();
+
 
         foreach ($routes as $route) {
 
@@ -66,15 +48,16 @@ class Matcher implements MatcherInterface
             // prepares regex string, might very complicated
             $regex = $this->prepareRegex($route);
 
+            var_dump($regex);
             // lets check the regex is matching with called request
             if ( ! preg_match($regex, $requestUri, $matched)) {
                 continue;
             }
 
-
-            $parameters  = array_merge($this->cleanMatchedObject($matched), $route->getDefaults());
-
-            return new HandledRoute($route, $parameters);
+            return new HandledRoute(
+                $route,
+                array_merge($this->cleanMatchedObject($matched), $route->getDefaults())
+            );
         }
     }
 
@@ -160,5 +143,6 @@ class Matcher implements MatcherInterface
                 )
             );
         }
+
     }
 }

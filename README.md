@@ -17,9 +17,10 @@ $route->setMethods(array('GET'))
     ));
 $collection->addRoute($route);
 
-$request = \Symfony\Component\HttpFoundation\Request::create('/post/5', 'GET');
-$matcher = new \Cable\Routing\Matcher($request, $collection);
 
-$matched = $matcher->match();
+$request = \Symfony\Component\HttpFoundation\Request::create('/post/5', 'GET');
+$matcher = new \Cable\Routing\Matcher();
+
+$handled = (new \Cable\Routing\Routing($request, $collection, $matcher))->handle();
 
 ```

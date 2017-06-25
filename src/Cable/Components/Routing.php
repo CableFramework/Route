@@ -3,6 +3,10 @@
 namespace Cable\Routing;
 
 
+use Cable\Routing\Exceptions\RouteNotFoundException;
+use Cable\Routing\Interfaces\MatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
+
 class Routing
 {
 
@@ -14,12 +18,43 @@ class Routing
 
 
     /**
-     * Routing constructor.
-     * @param RouteCollection $collection
+     * @var MatcherInterface
      */
-    public function __construct(RouteCollection $collection)
+    private $matcher;
+
+    /**
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * Routing constructor.
+     * @param Request $request
+     * @param RouteCollection $collection
+     * @param MatcherInterface $matcher
+     */
+    public function __construct(Request $request, RouteCollection $collection, MatcherInterface $matcher)
     {
         $this->collection = $collection;
+        $this->matcher = $matcher;
+        $this->request = $request;
     }
 
+
+    /**
+     * @return mixed
+     * @throws RouteNotFoundException
+     */
+    public function handle(){
+         $handled = $this->matcher->match($this->request, $this->collection);
+
+        if ( !$handled) {
+            throw new RouteNotFoundException(
+                sprintf('there is not route matched with %s', $this->request->getUri())
+            );
+        }
+
+
+        return $handled;
+    }
 }
