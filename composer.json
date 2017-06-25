@@ -17,10 +17,8 @@
     },
     "minimum-stability": "stable",
     "require": {
-        "symfony/routing": "^3.3",
         "cable/cable-config": "^1.0",
         "symfony/http-foundation": "^3.3",
-        "cable/cable-facades": "^1.0",
-        "cable/cable-container": "^1.2"
+        "cable/cable-facades": "^1.0"
     }
 }
