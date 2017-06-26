@@ -3,7 +3,9 @@
 namespace Cable\Routing;
 
 
+use Cable\Routing\Exceptions\LoaderException;
 use Cable\Routing\Exceptions\RouteNotFoundException;
+use Cable\Routing\Interfaces\LoaderInterface;
 use Cable\Routing\Interfaces\MatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -56,5 +58,26 @@ class Routing
 
 
         return $handled;
+    }
+
+    /**
+     * @param LoaderInterface $loader
+     * @return $this
+     * @throws LoaderException when loader did not return a route collection
+     */
+    public function loadFromLoader(LoaderInterface $loader){
+        $collection = $loader->load();
+
+        if ( !$collection instanceof RouteCollection) {
+            throw new LoaderException(
+                sprintf('%s loader did not return a route collection', get_class($loader))
+            );
+        }
+
+        $this->collection->addCollection(
+            $collection
+        );
+
+        return $this;
     }
 }
