@@ -2,6 +2,7 @@
 namespace Cable\Routing\Loader;
 
 use Cable\Annotation\ExecutedBag;
+use Cable\Routing\Exceptions\AnnotationLoaderException;
 use Cable\Routing\RouteCollection;
 use Cable\Routing\Interfaces\LoaderInterface;
 
@@ -33,6 +34,23 @@ class AnnotationLoader implements LoaderInterface
      */
     public function load()
     {
-        // TODO: Implement load() method.
+
+        $this->throwExceptionConstructorRoutes();
+
+    }
+
+
+    private function throwExceptionConstructorRoutes(){
+        if ($this->annotations->get('Route')) {
+            throw new AnnotationLoaderException(
+                'You cant have a route annotation in class doc'
+            );
+        }
+
+        if ($this->annotations->get('methods\__construct\Route')) {
+            throw new AnnotationLoaderException(
+                'You cant have a route annotation in constructor method'
+            );
+        }
     }
 }
