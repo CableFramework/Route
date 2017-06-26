@@ -9,10 +9,15 @@ use Cable\Routing\Interfaces\LoaderInterface;
 use Cable\Routing\Interfaces\MatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class Routing
+ * @package Cable\Routing
+ */
 class Routing
 {
 
     const DEFAULT_REGEX = '[A-z0-9*?]+';
+
     /**
      * @var RouteCollection
      */
