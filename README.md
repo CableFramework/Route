@@ -90,3 +90,37 @@ $matcher =  new NestedMatcher(
 $handled = (new \Cable\Routing\Routing($request, $collection, $matcher))->handle();
 
 ```
+
+
+## Use Annotations
+
+You can use Annotations for routing
+
+```php 
+
+use Cable\Routing\Annotations\Group;
+use Cable\Routing\Annotations\Route;
+
+/**
+ *
+ * @Group(prefix="/post", scheme={"http", "https"})
+ */
+class YourController{
+
+     /**
+      *
+      * @Route("/test", name="test" , methods="GET" )
+      *
+      *  // same as $route = new Route("/test");
+      *  // $route->setName('test')
+      *  // ->setMethods("GET");
+      *
+      */
+     public function testMethod(){
+     
+     
+     }
+
+}
+
+```

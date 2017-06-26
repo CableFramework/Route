@@ -76,6 +76,7 @@ class RouteCollection extends Route
         $host = $collection->getHost();
         $scheme = $collection->getScheme();
         $methods = $collection->getMethods();
+        $default = $collection->getDefaults();
 
         foreach ($routes as $route){
 
@@ -97,6 +98,12 @@ class RouteCollection extends Route
 
             if (!empty($host) && empty($route->getHost())) {
                 $route->setHost($host);
+            }
+
+            if ( !empty($default)) {
+                $route->setDefaults(
+                    array_merge($default, $route->getDefaults())
+                );
             }
 
             $this->addRoute($route);

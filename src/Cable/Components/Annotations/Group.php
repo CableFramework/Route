@@ -1,5 +1,4 @@
 <?php
-
 namespace Cable\Routing\Annotations;
 
 use Cable\Annotation\Command;
@@ -8,9 +7,9 @@ use Cable\Annotation\Command;
  * Class Route
  * @package Cable\Routing\Annotations
  * @Annotation()
- * @Name("Route")
+ * @Name("Group")
  */
-class Route extends Command
+class Group extends Command
 {
 
     /**
@@ -19,7 +18,7 @@ class Route extends Command
      *
      * @Required()
      */
-    public $uri;
+    public $prefix;
 
     /**
      * @var string
@@ -28,13 +27,6 @@ class Route extends Command
      * @Default({"GET"})
      */
     public $methods;
-
-    /**
-     * @var string
-     * @Annotation()
-     */
-    public $name;
-
 
     /**
      * @var string
