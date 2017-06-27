@@ -21,7 +21,7 @@ class Group extends Command
     public $prefix;
 
     /**
-     * @var string
+     * @var array
      * @Annotation()
      *
      * @Default({"GET"})
@@ -49,4 +49,11 @@ class Group extends Command
      *
      */
     public $defaults;
+
+    /**
+     * @var array
+     * @Annotation()
+     * @Default({})
+     */
+    public $requirements;
 }

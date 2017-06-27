@@ -1,7 +1,10 @@
 <?php
 namespace Cable\Routing;
 
-
+/**
+ * Class RouteCollection
+ * @package Cable\Routing
+ */
 class RouteCollection extends Route
 {
 
@@ -27,6 +30,7 @@ class RouteCollection extends Route
         parent::__construct('', $requirements);
         $this->setPrefix($uri);
     }
+
 
     /**
      * @return string

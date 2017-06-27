@@ -169,8 +169,10 @@ class Route
      * @param array $scheme
      * @return Route
      */
-    public function setScheme(array $scheme)
+    public function setScheme($scheme)
     {
+        $scheme = (array) $scheme;
+
         $this->scheme = array_map('strtolower', $scheme);
 
         return $this;

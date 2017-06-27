@@ -22,7 +22,7 @@ class Route extends Command
     public $uri;
 
     /**
-     * @var string
+     * @var array
      * @Annotation()
      *
      * @Default({"GET"})
@@ -57,4 +57,12 @@ class Route extends Command
      *
      */
     public $defaults;
+
+
+    /**
+     * @var array
+     * @Annotation()
+     * @Default({})
+     */
+    public $requirements;
 }
