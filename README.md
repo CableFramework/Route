@@ -124,3 +124,33 @@ class YourController{
 }
 
 ```
+
+
+# Loaders
+
+## ArrayLoader
+
+You can provide your routes in array
+
+```php 
+
+use Cable\Routing\Loader\ArrayLoader;
+
+$loader = new ArrayLoader();
+
+$loader->setArray([
+  
+    [
+       'uri' => '/',
+       'name' => 'name',
+       'methods' => ['GET'],
+       'scheme' => ['http', 'https'],
+       'host' => ':test.test.com',
+       'requirements' => [':test' => '[A-z]+'],
+   
+    ],
+   
+]);
+
+```
+

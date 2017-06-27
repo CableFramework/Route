@@ -2,7 +2,9 @@
 
 namespace Cable\Routing\Loader;
 
+use Cable\Annotation\Annotation;
 use Cable\Annotation\ExecutedBag;
+use Cable\Annotation\Parser;
 use Cable\Routing\Annotations\Group;
 use Cable\Routing\Annotations\Route;
 use Cable\Routing\Exceptions\AnnotationLoaderException;
@@ -36,10 +38,11 @@ class AnnotationLoader implements LoaderInterface
      * AnnotationLoader constructor.
      * @param ExecutedBag $bag
      */
-    public function __construct(ExecutedBag $bag)
+    public function __construct(ExecutedBag $bag = null)
     {
         $this->annotations = $bag;
     }
+
 
     /**
      * returns all loaded routes

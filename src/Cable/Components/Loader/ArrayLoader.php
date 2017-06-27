@@ -32,4 +32,23 @@ class ArrayLoader implements LoaderInterface
     {
 
     }
+
+    /**
+     * @return array
+     */
+    public function getArray()
+    {
+        return $this->array;
+    }
+
+    /**
+     * @param array $array
+     * @return ArrayLoader
+     */
+    public function setArray(array $array)
+    {
+        $this->array = $array;
+
+        return $this;
+    }
 }
