@@ -81,6 +81,7 @@ class RouteCollection extends Route
         $scheme = $collection->getScheme();
         $methods = $collection->getMethods();
         $default = $collection->getDefaults();
+        $requirements = $collection->getRequirements();
 
         foreach ($routes as $route){
 
@@ -109,6 +110,14 @@ class RouteCollection extends Route
                     array_merge($default, $route->getDefaults())
                 );
             }
+
+            if ( !empty($requirements)) {
+                $route->setRequirements(
+                    array_merge($requirements, $route->getRequirements())
+                );
+            }
+
+
 
             $this->addRoute($route);
         }

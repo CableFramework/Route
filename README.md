@@ -142,10 +142,11 @@ $loader->setArray([
   [
     
      // group values 
+     'group' => true,
      'prefix' => '/',
     
      [
-       'uri' => '/',
+       'path' => '/',
        'name' => 'name',
        'methods' => ['GET'],
        'scheme' => ['http', 'https'],
@@ -156,6 +157,7 @@ $loader->setArray([
   ]
    
 ]);
+
 
 ```
 
