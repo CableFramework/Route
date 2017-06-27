@@ -8,10 +8,12 @@ use Cable\Routing\Exceptions\RouteNotFoundException;
 use Cable\Routing\Interfaces\LoaderInterface;
 use Cable\Routing\Interfaces\MatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Cable\Container\Annotations\Provider;
 
 /**
  * Class Routing
  * @package Cable\Routing
+ * @Provider({"Cable\Routing\Providers\AnnotationServiceProvider"})
  */
 class Routing
 {
