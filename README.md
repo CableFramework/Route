@@ -139,8 +139,12 @@ use Cable\Routing\Loader\ArrayLoader;
 $loader = new ArrayLoader();
 
 $loader->setArray([
-  
-    [
+  [
+    
+     // group values 
+     'prefix' => '/',
+    
+     [
        'uri' => '/',
        'name' => 'name',
        'methods' => ['GET'],
@@ -148,7 +152,8 @@ $loader->setArray([
        'host' => ':test.test.com',
        'requirements' => [':test' => '[A-z]+'],
    
-    ],
+     ],
+  ]
    
 ]);
 
