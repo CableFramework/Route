@@ -158,6 +158,30 @@ $loader->setArray([
    
 ]);
 
+```
+
+## AnnotationLoader
+
+```php
+
+class TestController{
+       
+       /**
+        *
+        * @Route("/test", name="test")
+        *
+        */
+       public function test(){
+       
+       
+       }
+       
+}
+
+
+$executed = (new Annotation(new Parser())->executeClass(new TestController());
+
+$loader = new AnnotationLoader($executed);
 
 ```
 

@@ -52,6 +52,8 @@ class AnnotationLoader implements LoaderInterface
      */
     public function load()
     {
+
+
         $this->throwExceptionConstructorRoutes();
         $this->addGlobalGroup();
         $this->loopRoutes();
@@ -173,6 +175,8 @@ class AnnotationLoader implements LoaderInterface
         if ( ! empty($item->scheme)) {
             $newGroup->setScheme($item->scheme);
         }
+        
+
 
         return $newGroup;
     }
