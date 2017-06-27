@@ -37,6 +37,7 @@ class Routing
     private $request;
 
     /**
+     *
      * Routing constructor.
      * @param Request $request
      * @param RouteCollection $collection
