@@ -3,8 +3,10 @@
 namespace Cable\Routing\Loader;
 
 use Cable\Annotation\Annotation;
+use Cable\Annotation\CommandNotFoundException;
 use Cable\Annotation\ExecutedBag;
 use Cable\Annotation\Parser;
+use Cable\Annotation\RequiredArgumentException;
 use Cable\Routing\Annotations\Group;
 use Cable\Routing\Annotations\Route;
 use Cable\Routing\Exceptions\AnnotationLoaderException;
@@ -45,6 +47,31 @@ class AnnotationLoader implements LoaderInterface
 
 
     /**
+     * @param object $object
+     * @param Annotation|null $annotation
+     *
+     * @throws CommandNotFoundException
+     * @throws Parser\Exception\ParserException
+     * @throws RequiredArgumentException
+     * @throws \ReflectionException
+     *
+     * @return $this
+     */
+    public function loadFromClass($object, Annotation $annotation = null){
+        $this->annotations = null;
+        $this->globalGroup = null;
+        $this->routes = null;
+
+        if ($annotation === null) {
+            $annotation = new Annotation((new Parser())->skipPhpDoc());
+        }
+
+        $this->annotations = $annotation->executeClass($object);
+
+        return $this;
+    }
+
+    /**
      * returns all loaded routes
      *
      * @throws LoaderException
@@ -52,8 +79,6 @@ class AnnotationLoader implements LoaderInterface
      */
     public function load()
     {
-
-
         $this->throwExceptionConstructorRoutes();
         $this->addGlobalGroup();
         $this->loopRoutes();
@@ -100,7 +125,7 @@ class AnnotationLoader implements LoaderInterface
     {
         $methods = $this->annotations->methods()->getObjects();
 
-        foreach ($methods as $method) {
+        foreach ($methods as $name => $method) {
             if ( ! isset($method['Route'])) {
                 continue;
             }
@@ -111,6 +136,10 @@ class AnnotationLoader implements LoaderInterface
              * @var Route[] $routes
              */
             foreach ($routes as $route) {
+                if (null === $route->from) {
+                    $route->from = $this->class.'::'.$name;
+                }
+
                 $this->routes[] = $this->prepareRouteInstance($route);
             }
         }
@@ -175,7 +204,7 @@ class AnnotationLoader implements LoaderInterface
         if ( ! empty($item->scheme)) {
             $newGroup->setScheme($item->scheme);
         }
-        
+
 
 
         return $newGroup;

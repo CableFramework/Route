@@ -65,4 +65,10 @@ class Route extends Command
      * @Default({})
      */
     public $requirements;
+
+    /**
+     * @var array
+     * @Annotation()
+     */
+    public $from;
 }

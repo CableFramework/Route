@@ -179,9 +179,9 @@ class TestController{
 }
 
 
-$executed = (new Annotation(new Parser())->executeClass(new TestController());
+$loader = new AnnotationLoader();
 
-$loader = new AnnotationLoader($executed);
+$loader->loadFromClass(new TestController());
 
 ```
 
