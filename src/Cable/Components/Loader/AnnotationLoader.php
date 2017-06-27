@@ -36,6 +36,11 @@ class AnnotationLoader implements LoaderInterface
      */
     private $routes;
 
+
+    /**
+     * @var string
+     */
+    private $class;
     /**
      * AnnotationLoader constructor.
      * @param ExecutedBag $bag
@@ -67,6 +72,7 @@ class AnnotationLoader implements LoaderInterface
         }
 
         $this->annotations = $annotation->executeClass($object);
+        $this->class = get_class($object);
 
         return $this;
     }
