@@ -7,9 +7,8 @@ use Cable\Routing\Exceptions\LoaderException;
 use Cable\Routing\Exceptions\RouteNotFoundException;
 use Cable\Routing\Interfaces\LoaderInterface;
 use Cable\Routing\Interfaces\MatcherInterface;
-use Psr\Http\Message\RequestInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Cable\Container\Annotations\Provider;
+use Cable\Routing\Interfaces\RequestInterface;
 
 /**
  * Class Routing
