@@ -3,7 +3,6 @@
 namespace Cable\Routing\Interfaces;
 
 use Cable\Routing\RouteCollection;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Interface MatcherInterface
@@ -13,10 +12,10 @@ interface MatcherInterface
 {
 
     /**
-     * @param Request $request
+     * @param RequestInterface $request
      * @param RouteCollection $collection
      *
      * @return mixed
      */
-    public function match(Request $request, RouteCollection $collection);
+    public function match(RequestInterface $request, RouteCollection $collection);
 }

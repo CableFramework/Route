@@ -8,7 +8,7 @@ use Cable\Routing\Preparer\RegexPrepare;
 use Cable\Routing\Route;
 use Cable\Routing\RouteCollection;
 use Cable\Routing\Interfaces\MatcherInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Cable\Routing\Interfaces\RequestInterface;
 
 /**
  * Class RegexMatcher
@@ -29,12 +29,12 @@ class RegexMatcher implements MatcherInterface
     ];
 
     /**
-     * @param Request $request an symfony request instance
+     * @param RequestInterface $request any psr-7 interface
      * @param RouteCollection $collection
      *
      * @return mixed
      */
-    public function match(Request $request, RouteCollection $collection)
+    public function match(RequestInterface $request, RouteCollection $collection)
     {
         $this->request = $request;
 
@@ -99,29 +99,6 @@ class RegexMatcher implements MatcherInterface
         $this->neededParameters = array_merge($this->neededParameters, $preparer->getParameters());
 
         return $prepared;
-    }
-
-    /**
-     * @param Route $route
-     * @return string
-     */
-    private function prepareStaticUri(Route $route)
-    {
-        return sprintf(
-            '%s://%s%s',
-            $route->getScheme()[0],
-            $route->getHost(),
-            $route->getUri()
-        );
-    }
-
-    /**
-     * @param Route $route
-     * @return bool
-     */
-    private function neededRegex(Route $route)
-    {
-        return $this->hasRegexCommand($route->getHost()) ||$this->hasRegexCommand($route->getUri());
     }
 
     /**

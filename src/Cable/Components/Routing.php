@@ -7,6 +7,7 @@ use Cable\Routing\Exceptions\LoaderException;
 use Cable\Routing\Exceptions\RouteNotFoundException;
 use Cable\Routing\Interfaces\LoaderInterface;
 use Cable\Routing\Interfaces\MatcherInterface;
+use Psr\Http\Message\RequestInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Cable\Container\Annotations\Provider;
 
@@ -39,11 +40,11 @@ class Routing
     /**
      *
      * Routing constructor.
-     * @param Request $request
+     * @param RequestInterface $request
      * @param RouteCollection $collection
      * @param MatcherInterface $matcher
      */
-    public function __construct(Request $request, RouteCollection $collection, MatcherInterface $matcher)
+    public function __construct(RequestInterface $request, RouteCollection $collection, MatcherInterface $matcher)
     {
         $this->collection = $collection;
         $this->matcher = $matcher;

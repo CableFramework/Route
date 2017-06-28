@@ -3,7 +3,7 @@
 namespace Cable\Routing;
 
 
-use Symfony\Component\HttpFoundation\Request;
+use Cable\Routing\Interfaces\RequestInterface;
 
 trait MatcherRequestAware
 {
@@ -11,7 +11,7 @@ trait MatcherRequestAware
     /**
      * the instance of request
      *
-     * @var Request
+     * @var RequestInterface
      */
     protected $request;
 
@@ -20,14 +20,7 @@ trait MatcherRequestAware
      * @return string
      */
     protected function getRequestUri(){
-        $uri = $this->request->getUri();
-
-
-        if ($uri[-1] !== '/') {
-            $uri .= '/';
-        }
-
-        return $uri;
+        return $this->request->getUri();
     }
 
 }

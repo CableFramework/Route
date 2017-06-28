@@ -5,8 +5,9 @@ namespace Cable\Routing\Matcher;
 
 use Cable\Routing\HandledRoute;
 use Cable\Routing\RouteCollection;
+use Cable\Routing\Interfaces\RequestInterface;
 use Cable\Routing\Interfaces\MatcherInterface;
-use Symfony\Component\HttpFoundation\Request;
+
 
 class NestedMatcher implements MatcherInterface
 {
@@ -26,12 +27,12 @@ class NestedMatcher implements MatcherInterface
     }
 
     /**
-     * @param Request $request
+     * @param RequestInterface $request
      * @param RouteCollection $collection
      *
      * @return mixed
      */
-    public function match(Request $request, RouteCollection $collection)
+    public function match(RequestInterface $request, RouteCollection $collection)
     {
          foreach ($this->matchers as $matcher){
               $handled = $matcher->match($request, $collection);
