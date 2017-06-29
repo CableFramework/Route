@@ -39,7 +39,7 @@ class Route
     /**
      * @var array
      */
-    private $scheme = ["http", "https"];
+    private $scheme = ['http', 'https'];
 
     /**
      * @var array
