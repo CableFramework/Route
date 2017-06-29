@@ -52,7 +52,7 @@ class Route
      * @param $uri
      * @param array $requirements
      */
-    public function __construct($uri, array $requirements = [])
+    public function __construct($uri = '/', array $requirements = [])
     {
         $this->setUri($uri);
         $this->requirements = $requirements;

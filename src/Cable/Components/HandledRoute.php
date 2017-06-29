@@ -2,7 +2,10 @@
 
 namespace Cable\Routing;
 
-
+/**
+ * Class HandledRoute
+ * @package Cable\Routing
+ */
 class HandledRoute
 {
 
