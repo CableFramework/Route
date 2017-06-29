@@ -64,6 +64,10 @@ class Request implements RequestInterface
     }
 
     /**
+     * returns scheme
+     *
+     * @example 'http'
+     *
      * @return string
      */
     public function getScheme(){
@@ -71,6 +75,8 @@ class Request implements RequestInterface
     }
 
     /**
+     * returns host string
+     *
      * @return string
      */
     public function getHost()
