@@ -28,7 +28,7 @@ class Route
     /**
      * @var array
      */
-    private $methods = [];
+    private $methods = ['GET'];
 
     /**
      * @var string
