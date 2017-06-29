@@ -46,7 +46,11 @@ class Routing
      * @param RouteCollection|null $collection
      * @param MatcherInterface $matcher
      */
-    public function __construct(RequestInterface $request, RouteCollection $collection = null, MatcherInterface $matcher)
+    public function __construct(
+        RequestInterface $request,
+        RouteCollection $collection = null,
+        MatcherInterface $matcher
+    )
     {
         $this->collection = $collection;
         $this->matcher = $matcher;
