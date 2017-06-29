@@ -148,12 +148,17 @@ class Route
 
     /**
      * @param string $host
+     * @param array $requirements
      * @return Route
      */
-    public function setHost($host)
+    public function setHost($host, array $requirements = [])
     {
         $this->host = $host;
 
+        if ( !empty($requirements)) {
+            $this->requirements = array_merge($this->requirements, $requirements);
+        }
+        
         return $this;
     }
 
