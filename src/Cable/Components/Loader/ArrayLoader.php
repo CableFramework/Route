@@ -48,20 +48,12 @@ class ArrayLoader implements LoaderInterface
             $group = $this->prepareGroupInstance($array);
 
 
-            foreach ($array as $item => $value) {
+            $handle = $this->loadFromArray($array['group']);
 
-                // we need an array to process, so just skip the other
-                if ( ! is_array($value)) {
-                    continue;
-                }
-
-                $handle = $this->loadFromArray($value);
-
-                if ($handle instanceof RouteCollection) {
-                    $group->addCollection($handle);
-                } else {
-                    $group->addRoute($handle);
-                }
+            if ($handle instanceof RouteCollection) {
+                $group->addCollection($handle);
+            } else {
+                $group->addRoute($handle);
             }
 
             return $group;
@@ -112,6 +104,7 @@ class ArrayLoader implements LoaderInterface
      */
     private function prepareRouteInstance(array $route)
     {
+
         if ( ! isset($route['path'])) {
             throw new LoaderException(
                 'You must provide an path key'
