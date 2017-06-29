@@ -4,6 +4,7 @@ namespace Cable\Routing\Matcher;
 
 
 use Cable\Routing\HandledRoute;
+use Cable\Routing\MatcherRequestAware;
 use Cable\Routing\RouteCollection;
 use Cable\Routing\Interfaces\MatcherInterface;
 use Cable\Routing\Interfaces\RequestInterface;
@@ -15,7 +16,7 @@ use Cable\Routing\Interfaces\RequestInterface;
 class StaticMatcher implements MatcherInterface
 {
 
-    use RegexAwareTrait;
+    use RegexAwareTrait, MatcherRequestAware;
     /**
      * @param RequestInterface $request
      * @param RouteCollection $collection
@@ -24,10 +25,13 @@ class StaticMatcher implements MatcherInterface
      */
     public function match(RequestInterface $request, RouteCollection $collection)
     {
+        $this->request = $request;
+
         $routes = $collection->getRoutes();
 
         $scheme = $request->getScheme();
         $method = $request->getMethod();
+
 
         foreach ($routes as $route){
 
@@ -44,8 +48,14 @@ class StaticMatcher implements MatcherInterface
                 continue;
             }
 
+
             if ($request->getPath() === $route->getUri()) {
-                return new HandledRoute($route, $route->getDefaults());
+                $defaults = $route->getDefaults();
+                $defaults['handled_url'] = $this->getRequestUri();
+                $defaults['scheme_id'] = $scheme;
+
+
+                return new HandledRoute($route, $defaults);
             }
         }
 

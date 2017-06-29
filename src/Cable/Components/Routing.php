@@ -18,6 +18,9 @@ use Cable\Routing\Interfaces\RequestInterface;
 class Routing
 {
 
+    // controller value
+    const CONTROLLER = '__controller';
+
     const DEFAULT_REGEX = '[A-z0-9*?]+';
 
     /**
