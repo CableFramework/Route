@@ -28,6 +28,7 @@ class ArrayLoader implements LoaderInterface
     /**
      * returns all loaded routes
      *
+     * @throws LoaderException
      * @return RouteCollection
      */
     public function load()
@@ -37,7 +38,6 @@ class ArrayLoader implements LoaderInterface
 
     /**
      * @param array $array
-     *
      * @throws LoaderException
      * @return RouteCollection|Route
      */
