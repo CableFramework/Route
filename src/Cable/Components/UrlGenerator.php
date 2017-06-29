@@ -28,7 +28,12 @@ class UrlGenerator
         $this->request= $request;
     }
 
-
+    /**
+     * @param string $name the name of route
+     * @param array $parameters
+     * @return mixed|string
+     * @throws NotFoundException
+     */
     public function generate($name, array $parameters = []){
         $route = $this->collection->getRouteByName($name);
 
@@ -44,6 +49,11 @@ class UrlGenerator
         return $this->prepareUrl($route, $parameters);
     }
 
+    /**
+     * @param Route $route
+     * @param array $parameters
+     * @return mixed|string
+     */
     private function prepareUrl(Route $route, array $parameters){
         // get host
         $host = null === $route->getHost() ? $this->request->getHost() : $route->getHost();

@@ -76,6 +76,10 @@ class RouteCollection extends Route
     public function addCollection(RouteCollection $collection){
         $routes = $collection->getRoutes();
 
+        if(empty($routes)){
+            return $this;
+        }
+
         $prefix = $collection->getPrefix();
         $host = $collection->getHost();
         $scheme = $collection->getScheme();
