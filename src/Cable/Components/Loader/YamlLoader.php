@@ -43,10 +43,6 @@ class YamlLoader implements LoaderInterface
                 throw new LoaderException('routes key not exists in yaml file, please check');
             }
 
-            if ( !isset($routes['routes']['group'])) {
-                $routes['routes']['group'] = true;
-            }
-
             return (new ArrayLoader($routes['routes']))->load();
         }catch (ParseException $exception){
             throw new LoaderException(
